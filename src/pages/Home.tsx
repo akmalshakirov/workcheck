@@ -65,26 +65,26 @@ export const Home = () => {
         transition: { duration: 0.4, type: "linear" },
     };
 
-    const staggerChildren = {
-        animate: {
-            transition: {
-                staggerChildren: 0.15,
-                delayChildren: 0.3,
-            },
-        },
-    };
+    // const staggerChildren = {
+    //     animate: {
+    //         transition: {
+    //             staggerChildren: 0.15,
+    //             delayChildren: 0.3,
+    //         },
+    //     },
+    // };
 
-    const scaleIn = {
-        initial: { opacity: 0, scale: 0.8 },
-        animate: { opacity: 1, scale: 1 },
-        transition: { duration: 0.4 },
-    };
+    // const scaleIn = {
+    //     initial: { opacity: 0, scale: 0.8 },
+    //     animate: { opacity: 1, scale: 1 },
+    //     transition: { duration: 0.4 },
+    // };
 
-    const bounceIn = {
-        initial: { opacity: 0, scale: 0.3 },
-        animate: { opacity: 1, scale: 1 },
-        transition: { duration: 0.8, type: "spring", bounce: 0.5 },
-    };
+    // const bounceIn = {
+    //     initial: { opacity: 0, scale: 0.3 },
+    //     animate: { opacity: 1, scale: 1 },
+    //     transition: { duration: 0.8, type: "spring", bounce: 0.5 },
+    // };
 
     return (
         <div className='min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white overflow-hidden'>
