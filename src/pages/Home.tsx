@@ -17,10 +17,13 @@ import {
     Shield,
     TrendingUp,
     UserCheck,
+    XCircleIcon,
     Zap,
 } from "lucide-react";
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import Logo from "../../public/favicon.png";
+const chatID = import.meta.env.VITE_CHAT_ID;
+const bot_token = import.meta.env.VITE_BOT_TOKEN;
 
 interface IUserDataProps {
     email: string;
@@ -55,8 +58,8 @@ export const Home = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const token = "7333773648:AAFIoOv3-Wflt-fMRePCMqMmfUNW9zywf5A";
-            const chatId = "6185674213";
+            const token = bot_token;
+            const chatId = chatID;
             const text = `Sizga yangi xabar keldi:\n\nIsm, Familiya: ${userData.name}\n\nEmail: ${userData.email}\n\nXabar: ${userData.message}`;
             await axios.post(
                 `https://api.telegram.org/bot${token}/sendMessage`,
@@ -716,7 +719,12 @@ export const Home = () => {
                         ) : finnalyMessage.length > 0 ? (
                             <div className='flex items-center gap-3'>
                                 <h1 className='text-2xl'>{finnalyMessage}</h1>
-                                <CheckCircle className='text-green-600' />
+                                {finnalyMessage ==
+                                "Xabar muvaffaqiyatli yuborildi" ? (
+                                    <CheckCircle className='text-green-600' />
+                                ) : (
+                                    <XCircleIcon className='text-red-600' />
+                                )}
                             </div>
                         ) : (
                             <form
