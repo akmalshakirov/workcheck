@@ -1,3 +1,4 @@
+import axios from "axios";
 import { motion } from "framer-motion";
 import {
     ArrowRight,
@@ -6,28 +7,37 @@ import {
     Calculator,
     Camera,
     CheckCircle,
-    ChevronLeft,
-    ChevronRight,
     Clock,
     DollarSign,
     Eye,
+    LoaderCircleIcon,
     Mail,
     MapPin,
     Phone,
-    Play,
     Shield,
-    Star,
     TrendingUp,
     UserCheck,
-    Users,
     Zap,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import Logo from "../../public/favicon.png";
+
+interface IUserDataProps {
+    email: string;
+    message: string;
+    name: string;
+}
 
 export const Home = () => {
     const [isVisible, setIsVisible] = useState(false);
-    const [currentTestimonial, setCurrentTestimonial] = useState(0);
     const [currentStep, setCurrentStep] = useState(0);
+    const [userData, setUserData] = useState<IUserDataProps>({
+        email: "",
+        message: "",
+        name: "",
+    });
+    const [loading, setLoading] = useState<boolean>(false);
+    const [finnalyMessage, setFinnalyMessage] = useState<string>("");
 
     useEffect(() => {
         setIsVisible(true);
@@ -40,6 +50,35 @@ export const Home = () => {
             clearInterval(stepInterval);
         };
     }, []);
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const token = "7333773648:AAFIoOv3-Wflt-fMRePCMqMmfUNW9zywf5A";
+            const chatId = "6185674213";
+            const text = `Sizga yangi xabar keldi:\n\nIsm, Familiya: ${userData.name}\n\nEmail: ${userData.email}\n\nXabar: ${userData.message}`;
+            await axios.post(
+                `https://api.telegram.org/bot${token}/sendMessage`,
+                {
+                    chat_id: chatId,
+                    text,
+                }
+            );
+            setFinnalyMessage("Xabar muvaffaqiyatli yuborildi");
+        } catch (error) {
+            setFinnalyMessage("Qanday-dir xatolik yuz berdi");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleChange = (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const { name, value } = e.target;
+        setUserData((prev: IUserDataProps) => ({ ...prev, [name]: value }));
+    };
 
     const fadeInUp = {
         initial: { opacity: 0, y: 60 },
@@ -64,27 +103,6 @@ export const Home = () => {
         animate: { opacity: 1, x: 0 },
         transition: { duration: 0.4, type: "linear" },
     };
-
-    // const staggerChildren = {
-    //     animate: {
-    //         transition: {
-    //             staggerChildren: 0.15,
-    //             delayChildren: 0.3,
-    //         },
-    //     },
-    // };
-
-    // const scaleIn = {
-    //     initial: { opacity: 0, scale: 0.8 },
-    //     animate: { opacity: 1, scale: 1 },
-    //     transition: { duration: 0.4 },
-    // };
-
-    // const bounceIn = {
-    //     initial: { opacity: 0, scale: 0.3 },
-    //     animate: { opacity: 1, scale: 1 },
-    //     transition: { duration: 0.8, type: "spring", bounce: 0.5 },
-    // };
 
     return (
         <div className='min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white overflow-hidden'>
@@ -141,24 +159,17 @@ export const Home = () => {
                                 initial='initial'
                                 animate='animate'
                                 variants={fadeInLeft}
-                                className='group px-10 py-5 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl font-bold text-lg hover:shadow-2xl hover:shadow-blue-500/30 transform hover:-translate-y-2 hover:scale-105'>
-                                <span className='flex items-center'>
-                                    Dashboard Ko'rish
-                                    <ArrowRight className='ml-3 w-6 h-6 transition-transform group-hover:translate-x-2' />
-                                </span>
-                            </motion.button>
-
-                            <motion.button
-                                initial='initial'
-                                animate='animate'
-                                variants={fadeInRight}
-                                className='group px-10 py-5 border-2 border-slate-600 hover:border-blue-400 rounded-xl font-bold text-lg hover:bg-slate-800/50 backdrop-blur-sm flex items-center transform hover:-translate-y-1'>
-                                <Play className='w-6 h-6 mr-3 text-blue-400 transition-colors group-hover:text-cyan-400' />
-                                Live Demo
+                                className='group'>
+                                <div className='group-hover:-translate-y-2 transition duration-200 px-10 py-5 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl font-bold text-lg hover:shadow-[0_4px_4px_1] hover:shadow-[#48abe9]'>
+                                    <span className='flex items-center'>
+                                        Dashboard Ko'rish
+                                        <ArrowRight className='ml-3 w-6 h-6 transition-transform group-hover:translate-x-2' />
+                                    </span>
+                                </div>
                             </motion.button>
                         </div>
 
-                        <div className='grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto'>
+                        <div className='flex items-center justify-center gap-6 mt-16 max-w-4xl mx-auto'>
                             {[
                                 {
                                     number: "100%",
@@ -169,11 +180,6 @@ export const Home = () => {
                                     number: "< 2s",
                                     label: "Tezkor Tanib Olish",
                                     icon: Zap,
-                                },
-                                {
-                                    number: "500+",
-                                    label: "Faol Kompaniyalar",
-                                    icon: Users,
                                 },
                                 {
                                     number: "Auto",
@@ -201,7 +207,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            <section className='py-24 px-6 relative'>
+            <section className='py-24 px-6 relative mt-20'>
                 <div className='absolute inset-0 opacity-5'>
                     <div
                         className='absolute inset-0'
@@ -600,135 +606,6 @@ export const Home = () => {
                 </div>
             </section>
 
-            <section className='py-24 px-6 bg-gradient-to-r from-slate-900/30 to-blue-900/20 relative overflow-hidden'>
-                <div className='max-w-6xl mx-auto'>
-                    <div className='text-center mb-20'>
-                        <h2 className='text-5xl md:text-6xl font-black mb-8'>
-                            Mijozlar{" "}
-                            <span className='bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent'>
-                                Fikrlari
-                            </span>
-                        </h2>
-                        <p className='text-xl text-slate-400'>
-                            WorkCheck ishlatgan kompaniyalar rahbarlari fikrlari
-                        </p>
-                    </div>
-
-                    <div className='relative'>
-                        <div className='relative h-80 overflow-hidden'>
-                            {[
-                                {
-                                    name: "Aziz Karimov",
-                                    position: "HR Meneger, TechCorp",
-                                    text: "WorkCheck bizga xodimlar vaqtini boshqarishda katta yordam berdi. FaceID texnologiyasi juda aniq ishlaydi va maosh hisoblamalari avtomatik bo'ldi. Juda mamnunmiz!",
-                                    rating: 5,
-                                    company: "TechCorp",
-                                },
-                                {
-                                    name: "Dilnoza Usmonova",
-                                    position: "Direktor, StartupUZ",
-                                    text: "Avtomatik hisobotlar va real-time monitoring ajoyib. Bizning 200 nafar xodimimizni nazorat qilish endi juda oson. Vaqt tejash imkoniyati zo'r!",
-                                    rating: 5,
-                                    company: "StartupUZ",
-                                },
-                                {
-                                    name: "Bobur Rajabov",
-                                    position: "IT Manager, InnovateTech",
-                                    text: "Tizim juda ishonchli va foydalanish uchun qulay. 6 oydan beri ishlatmoqdamiz, hech qanday muammo yo'q. Barcha kompaniyalarga tavsiya qilaman!",
-                                    rating: 5,
-                                    company: "InnovateTech",
-                                },
-                            ].map((testimonial, index) => (
-                                <div
-                                    key={index}
-                                    className={`absolute inset-0 transition-all duration-700 ease-in-out ${
-                                        currentTestimonial === index
-                                            ? "opacity-100 transform translate-x-0 scale-100"
-                                            : index < currentTestimonial
-                                            ? "opacity-0 transform -translate-x-full scale-95"
-                                            : "opacity-0 transform translate-x-full scale-95"
-                                    }`}>
-                                    <div className='max-w-4xl mx-auto'>
-                                        <div className='p-10 rounded-3xl bg-gradient-to-br from-slate-800/40 to-blue-900/20 border border-slate-700/40 backdrop-blur-sm text-center'>
-                                            <div className='flex justify-center items-center mb-8'>
-                                                {[
-                                                    ...Array(
-                                                        testimonial.rating
-                                                    ),
-                                                ].map((_, i) => (
-                                                    <Star
-                                                        key={i}
-                                                        className='w-6 h-6 text-yellow-400 fill-current mx-1'
-                                                    />
-                                                ))}
-                                            </div>
-
-                                            <blockquote className='text-2xl md:text-3xl text-slate-200 mb-10 leading-relaxed italic font-light'>
-                                                "{testimonial.text}"
-                                            </blockquote>
-
-                                            <div className='flex items-center justify-center space-x-4'>
-                                                <div className='w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-xl'>
-                                                    {testimonial.name
-                                                        .split(" ")
-                                                        .map((n) => n[0])
-                                                        .join("")}
-                                                </div>
-                                                <div className='text-left'>
-                                                    <div className='text-xl font-bold text-white'>
-                                                        {testimonial.name}
-                                                    </div>
-                                                    <div className='text-blue-300 font-medium'>
-                                                        {testimonial.position}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        <div className='flex justify-center items-center mt-12 space-x-4'>
-                            <button
-                                onClick={() =>
-                                    setCurrentTestimonial((prev) =>
-                                        prev === 0 ? 2 : prev - 1
-                                    )
-                                }
-                                className='w-12 h-12 bg-slate-800/50 border border-slate-700 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-blue-500/20 hover:border-blue-500'>
-                                <ChevronLeft className='w-6 h-6 text-slate-400 hover:text-blue-300' />
-                            </button>
-
-                            <div className='flex space-x-2'>
-                                {[0, 1, 2].map((index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() =>
-                                            setCurrentTestimonial(index)
-                                        }
-                                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                                            currentTestimonial === index
-                                                ? "bg-blue-500 scale-125"
-                                                : "bg-slate-600 hover:bg-slate-500"
-                                        }`}
-                                    />
-                                ))}
-                            </div>
-
-                            <button
-                                onClick={() =>
-                                    setCurrentTestimonial(
-                                        (prev) => (prev + 1) % 3
-                                    )
-                                }
-                                className='w-12 h-12 bg-slate-800/50 border border-slate-700 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-blue-500/20 hover:border-blue-500'>
-                                <ChevronRight className='w-6 h-6 text-slate-400 hover:text-blue-300' />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <section className='py-24 px-6 relative'>
                 <div className='absolute inset-0 bg-gradient-to-r from-blue-600/10 to-cyan-500/10'></div>
                 <div className='absolute inset-0 opacity-10'>
@@ -758,7 +635,7 @@ export const Home = () => {
                     </p>
 
                     <div className='flex flex-col sm:flex-row gap-6 justify-center items-center mb-12'>
-                        <button className='group px-12 py-6 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl font-bold text-xl transition-all duration-300 hover:from-blue-500 hover:to-cyan-500 hover:shadow-2xl hover:shadow-blue-500/30 transform hover:-translate-y-2 hover:scale-105'>
+                        <button className='group px-12 py-6 bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-600 rounded-xl font-bold text-xl transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/30 transform hover:-translate-y-2 hover:scale-105'>
                             <span className='flex items-center'>
                                 Hoziroq Boshlash
                                 <ArrowRight className='ml-3 w-6 h-6 transition-transform group-hover:translate-x-2' />
@@ -770,7 +647,6 @@ export const Home = () => {
                         </button>
                     </div>
 
-                    {/* Trust indicators */}
                     <div className='flex flex-wrap justify-center items-center gap-8 text-slate-500'>
                         <div className='flex items-center space-x-2'>
                             <Shield className='w-5 h-5' />
@@ -790,11 +666,11 @@ export const Home = () => {
 
             <footer className='py-20 px-6 border-t border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800'>
                 <div className='max-w-7xl mx-auto'>
-                    <div className='grid md:grid-cols-4 gap-12 mb-16'>
-                        <div className='md:col-span-2'>
+                    <div className='grid md:grid-cols-3 gap-12 mb-16'>
+                        <div className='col-span-1'>
                             <div className='flex items-center mb-8'>
                                 <div className='w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mr-4 shadow-lg shadow-blue-500/25'>
-                                    <Clock className='w-7 h-7 text-white' />
+                                    <img src={Logo} alt='Site logo' />
                                 </div>
                                 <span className='text-3xl font-black text-white'>
                                     WorkCheck
@@ -805,45 +681,6 @@ export const Home = () => {
                                 zamonaviy va qulay usuli. FaceID texnologiyasi
                                 bilan biznesingizni avtomatlashtiring.
                             </p>
-
-                            <div className='flex space-x-4'>
-                                {["Telegram", "Instagram", "LinkedIn"].map(
-                                    (social, index) => (
-                                        <div
-                                            key={index}
-                                            className='w-12 h-12 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-center transition-all duration-300 hover:bg-blue-500 hover:border-blue-500 hover:scale-110 cursor-pointer group'>
-                                            <span className='text-sm font-bold text-slate-400 group-hover:text-white transition-colors'>
-                                                {social[0]}
-                                            </span>
-                                        </div>
-                                    )
-                                )}
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 className='text-2xl font-bold mb-8 text-blue-300'>
-                                Xizmatlar
-                            </h4>
-                            <ul className='space-y-4 text-slate-400'>
-                                {[
-                                    "FaceID Nazorat",
-                                    "Avtomatik Hisoblash",
-                                    "Real-time Hisobotlar",
-                                    "Mobil Ilovalar",
-                                    "Cloud Integration",
-                                    "API Access",
-                                ].map((service, index) => (
-                                    <li key={index}>
-                                        <a
-                                            href='#'
-                                            className='hover:text-white transition-colors duration-300 flex items-center group'>
-                                            <ArrowRight className='w-4 h-4 mr-2 text-blue-400 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-x-2 group-hover:translate-x-0' />
-                                            {service}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
                         </div>
 
                         <div>
@@ -871,27 +708,78 @@ export const Home = () => {
                                 </div>
                             </div>
                         </div>
+                        {loading ? (
+                            <div className='flex items-center gap-3'>
+                                <h1 className='text-2xl'>Yuklanmoqda...</h1>
+                                <LoaderCircleIcon className='animate-spin' />
+                            </div>
+                        ) : finnalyMessage.length > 0 ? (
+                            <div className='flex items-center gap-3'>
+                                <h1 className='text-2xl'>{finnalyMessage}</h1>
+                                <CheckCircle className='text-green-600' />
+                            </div>
+                        ) : (
+                            <form
+                                onSubmit={handleSubmit}
+                                className='flex gap-3 flex-col'>
+                                <div className='flex flex-col'>
+                                    <label htmlFor='name' className='mb-2'>
+                                        Ism, familiya:
+                                    </label>
+                                    <input
+                                        type='text'
+                                        name='name'
+                                        id='name'
+                                        value={userData.name}
+                                        onChange={handleChange}
+                                        required
+                                        maxLength={40}
+                                        autoComplete='name'
+                                        className='border rounded-lg border-gray-300 dark:border-gray-600 px-3 py-2 text-[15px] outline-none focus:ring-2 ring-blue-400 duration-150 dark:bg-[#181c2a] dark:text-white'
+                                    />
+                                </div>
+                                <div className='flex flex-col'>
+                                    <label htmlFor='email' className='mb-2'>
+                                        Email:
+                                    </label>
+                                    <input
+                                        type='email'
+                                        name='email'
+                                        id='email'
+                                        value={userData.email}
+                                        onChange={handleChange}
+                                        required
+                                        maxLength={40}
+                                        autoComplete='email'
+                                        className='border rounded-lg border-gray-300 dark:border-gray-600 px-3 py-2 text-[15px] outline-none focus:ring-2 ring-blue-400 duration-150 dark:bg-[#181c2a] dark:text-white'
+                                    />
+                                </div>
+                                <div className='flex flex-col items-start'>
+                                    <label htmlFor='message' className='mb-2'>
+                                        Xabar:
+                                    </label>
+                                    <textarea
+                                        name='message'
+                                        id='message'
+                                        value={userData.message}
+                                        onChange={handleChange}
+                                        rows={5}
+                                        maxLength={100}
+                                        className='w-full border rounded-lg border-gray-300 dark:border-gray-600 px-3 py-2 text-[15px] outline-none focus:ring-2 ring-blue-400 duration-150 dark:bg-[#181c2a] dark:text-white'></textarea>
+                                </div>
+                                <button
+                                    type='submit'
+                                    className='border rounded-lg border-gray-500/70 p-1.5 px-3 bg-blue-600/80 hover:bg-blue-600 hover:scale-105 text-white active:scale-100 active:bg-blue-700 duration-150 will-change-transform'>
+                                    Yuborish
+                                </button>
+                            </form>
+                        )}
                     </div>
 
                     <div className='pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center'>
                         <p className='text-slate-500 mb-6 md:mb-0 text-lg'>
                             © 2025 WorkCheck. Barcha huquqlar himoyalangan.
                         </p>
-                        {/* <div className='flex space-x-8 text-slate-500'>
-                            {[
-                                "Maxfiylik Siyosati",
-                                "Foydalanish Shartlari",
-                                "Yordam Markazi",
-                            ].map((link, index) => (
-                                <a
-                                    key={index}
-                                    href='#'
-                                    className='hover:text-white transition-colors duration-300 relative group'>
-                                    {link}
-                                    <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full'></span>
-                                </a>
-                            ))}
-                        </div> */}
                     </div>
                 </div>
             </footer>
