@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import {
     ArrowRight,
     Award,
@@ -31,101 +32,98 @@ export const Home = () => {
     useEffect(() => {
         setIsVisible(true);
 
-        // Testimonial avtomatik o'zgarishi
-        const testimonialInterval = setInterval(() => {
-            setCurrentTestimonial((prev) => (prev + 1) % 3);
-        }, 4000);
-
-        // How it works steps avtomatik o'zgarishi
         const stepInterval = setInterval(() => {
             setCurrentStep((prev) => (prev + 1) % 4);
         }, 3000);
 
         return () => {
-            clearInterval(testimonialInterval);
             clearInterval(stepInterval);
         };
     }, []);
 
-    // Framer-motion animatsiya helper funksiyalari
-    // const fadeInUp = {
-    //     initial: { opacity: 0, y: 60 },
-    //     animate: { opacity: 1, y: 0 },
-    //     transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
-    // };
+    const fadeInUp = {
+        initial: { opacity: 0, y: 60 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.4 },
+    };
 
-    // const fadeInLeft = {
-    //     initial: { opacity: 0, x: -60 },
-    //     animate: { opacity: 1, x: 0 },
-    //     transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
-    // };
+    const fadeInDown = {
+        initial: { opacity: 0, y: -60 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.4, ease: "linear" },
+    };
 
-    // const fadeInRight = {
-    //     initial: { opacity: 0, x: 60 },
-    //     animate: { opacity: 1, x: 0 },
-    //     transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
-    // };
+    const fadeInLeft = {
+        initial: { opacity: 0, x: -60 },
+        animate: { opacity: 1, x: 0 },
+        transition: { duration: 0.4 },
+    };
 
-    // const staggerChildren = {
-    //     animate: {
-    //         transition: {
-    //             staggerChildren: 0.15,
-    //             delayChildren: 0.3,
-    //         },
-    //     },
-    // };
+    const fadeInRight = {
+        initial: { opacity: 0, x: 60 },
+        animate: { opacity: 1, x: 0 },
+        transition: { duration: 0.4, type: "linear" },
+    };
 
-    // const scaleIn = {
-    //     initial: { opacity: 0, scale: 0.8 },
-    //     animate: { opacity: 1, scale: 1 },
-    //     transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-    // };
+    const staggerChildren = {
+        animate: {
+            transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.3,
+            },
+        },
+    };
 
-    // const bounceIn = {
-    //     initial: { opacity: 0, scale: 0.3 },
-    //     animate: { opacity: 1, scale: 1 },
-    //     transition: { duration: 0.8, type: "spring", bounce: 0.5 },
-    // };
+    const scaleIn = {
+        initial: { opacity: 0, scale: 0.8 },
+        animate: { opacity: 1, scale: 1 },
+        transition: { duration: 0.4 },
+    };
+
+    const bounceIn = {
+        initial: { opacity: 0, scale: 0.3 },
+        animate: { opacity: 1, scale: 1 },
+        transition: { duration: 0.8, type: "spring", bounce: 0.5 },
+    };
 
     return (
         <div className='min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white overflow-hidden'>
-            {/* Hero Section */}
-            <section className='relative min-h-screen flex items-center justify-center px-6'>
-                <div className='absolute inset-0 opacity-20'>
-                    <div className='absolute inset-0 bg-gradient-to-r from-blue-600/30 to-cyan-500/30'></div>
-                    <div className='absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-pulse'></div>
-                    <div
-                        className='absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse'
-                        style={{ animationDelay: "1s" }}></div>
-                    <div
-                        className='absolute top-1/2 left-1/2 w-64 h-64 bg-indigo-500/15 rounded-full blur-2xl animate-pulse'
-                        style={{ animationDelay: "2s" }}></div>
-                </div>
-
+            <section className='relative min-h-screen flex items-center justify-center px-6 pt-10'>
                 <div className='relative z-10 text-center max-w-5xl mx-auto'>
-                    <div
-                        className={`transform transition-all duration-1200 ease-out ${
-                            isVisible
-                                ? "translate-y-0 opacity-100 scale-100"
-                                : "translate-y-16 opacity-0 scale-95"
-                        }`}>
-                        <div className='inline-flex items-center px-6 py-3 rounded-full bg-blue-500/20 border border-blue-400/40 mb-8 backdrop-blur-sm transition-all duration-300 hover:bg-blue-500/30 hover:border-blue-400/60'>
+                    <div>
+                        <motion.div
+                            variants={fadeInDown}
+                            initial='initial'
+                            animate='animate'
+                            className='inline-flex items-center px-6 py-3 rounded-full bg-blue-500/20 border border-blue-400/40 mb-8 backdrop-blur-sm hover:bg-blue-500/30 hover:border-blue-400/60'>
                             <Eye className='w-5 h-5 text-blue-300 mr-3' />
                             <span className='text-blue-200 font-medium'>
                                 FaceID bilan Avtomatik Nazorat
                             </span>
-                        </div>
+                        </motion.div>
 
                         <h1 className='text-6xl md:text-8xl font-black mb-8 leading-tight'>
-                            <span className='bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent'>
+                            <motion.span
+                                variants={fadeInLeft}
+                                initial='initial'
+                                animate='animate'
+                                className='inline-block bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent'>
                                 Work
-                            </span>
-                            <span className='bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-300 bg-clip-text text-transparent'>
+                            </motion.span>
+                            <motion.span
+                                variants={fadeInRight}
+                                initial='initial'
+                                animate='animate'
+                                className='inline-block bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-300 bg-clip-text text-transparent'>
                                 Check
-                            </span>
+                            </motion.span>
                         </h1>
 
-                        <p className='text-xl md:text-2xl text-slate-300 mb-6 leading-relaxed max-w-4xl mx-auto'>
+                        <motion.p
+                            variants={fadeInUp}
+                            initial='initial'
+                            animate='animate'
+                            className='text-xl md:text-2xl text-slate-300 mb-6 leading-relaxed max-w-4xl mx-auto'>
                             <span className='text-blue-300 font-semibold'>
                                 FaceID texnologiyasi
                             </span>{" "}
@@ -136,31 +134,34 @@ export const Home = () => {
                                 oylik maoshlarni avtomatik
                             </span>{" "}
                             hisoblang
-                        </p>
-
-                        <p className='text-lg text-slate-400 mb-10 max-w-3xl mx-auto'>
-                            Zamonaviy va ishonchli tizim orqali xodimlar
-                            faoliyatini real vaqtda nazorat qiling
-                        </p>
+                        </motion.p>
 
                         <div className='flex flex-col sm:flex-row gap-6 justify-center items-center'>
-                            <button className='group px-10 py-5 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl font-bold text-lg transition-all duration-300 hover:from-blue-500 hover:to-cyan-500 hover:shadow-2xl hover:shadow-blue-500/30 transform hover:-translate-y-2 hover:scale-105'>
+                            <motion.button
+                                initial='initial'
+                                animate='animate'
+                                variants={fadeInLeft}
+                                className='group px-10 py-5 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl font-bold text-lg hover:shadow-2xl hover:shadow-blue-500/30 transform hover:-translate-y-2 hover:scale-105'>
                                 <span className='flex items-center'>
                                     Dashboard Ko'rish
                                     <ArrowRight className='ml-3 w-6 h-6 transition-transform group-hover:translate-x-2' />
                                 </span>
-                            </button>
+                            </motion.button>
 
-                            <button className='group px-10 py-5 border-2 border-slate-600 hover:border-blue-400 rounded-xl font-bold text-lg transition-all duration-300 hover:bg-slate-800/50 backdrop-blur-sm flex items-center transform hover:-translate-y-1'>
+                            <motion.button
+                                initial='initial'
+                                animate='animate'
+                                variants={fadeInRight}
+                                className='group px-10 py-5 border-2 border-slate-600 hover:border-blue-400 rounded-xl font-bold text-lg hover:bg-slate-800/50 backdrop-blur-sm flex items-center transform hover:-translate-y-1'>
                                 <Play className='w-6 h-6 mr-3 text-blue-400 transition-colors group-hover:text-cyan-400' />
                                 Live Demo
-                            </button>
+                            </motion.button>
                         </div>
 
                         <div className='grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto'>
                             {[
                                 {
-                                    number: "99.9%",
+                                    number: "100%",
                                     label: "FaceID Aniqligi",
                                     icon: Camera,
                                 },
@@ -182,11 +183,7 @@ export const Home = () => {
                             ].map((stat, index) => (
                                 <div
                                     key={index}
-                                    className={`p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm transition-all duration-500 hover:bg-slate-800/50 hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/20 transform hover:-translate-y-1 ${
-                                        isVisible
-                                            ? "animate-slideInUp"
-                                            : "opacity-0"
-                                    }`}
+                                    className={`p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm transition-all duration-500 hover:bg-slate-800/50 hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/20 transform hover:-translate-y-1`}
                                     style={{
                                         animationDelay: `${index * 0.15}s`,
                                     }}>
@@ -202,17 +199,8 @@ export const Home = () => {
                         </div>
                     </div>
                 </div>
-
-                <div className='absolute bottom-8 left-1/2 transform -translate-x-1/2'>
-                    <div className='animate-bounce'>
-                        <div className='w-6 h-10 border-2 border-blue-400 rounded-full flex justify-center opacity-75'>
-                            <div className='w-1 h-3 bg-blue-400 rounded-full mt-2 animate-pulse'></div>
-                        </div>
-                    </div>
-                </div>
             </section>
 
-            {/* Xususiyatlar Section */}
             <section className='py-24 px-6 relative'>
                 <div className='absolute inset-0 opacity-5'>
                     <div
@@ -316,7 +304,6 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* Qanday Ishlaydi Section */}
             <section className='py-24 px-6 bg-gradient-to-r from-slate-900/50 to-blue-900/30 relative'>
                 <div className='max-w-6xl mx-auto'>
                     <div className='text-center mb-20'>
@@ -334,7 +321,6 @@ export const Home = () => {
                     </div>
 
                     <div className='relative'>
-                        {/* Progress line */}
                         <div className='hidden lg:block absolute top-24 left-0 right-0 h-1 bg-slate-700'>
                             <div
                                 className='h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-1000 ease-out'
@@ -407,7 +393,6 @@ export const Home = () => {
                                                 ? "bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-2 border-blue-400/50 shadow-2xl shadow-blue-500/25"
                                                 : "bg-slate-800/30 border border-slate-700/50 hover:border-blue-500/30"
                                         } backdrop-blur-sm`}>
-                                        {/* Step number */}
                                         <div
                                             className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl text-xl font-bold mb-6 transition-all duration-500 ${
                                                 currentStep === index
@@ -417,7 +402,6 @@ export const Home = () => {
                                             {item.step}
                                         </div>
 
-                                        {/* Icon */}
                                         <div
                                             className={`w-12 h-12 mb-6 transition-all duration-500 ${
                                                 currentStep === index
@@ -445,7 +429,6 @@ export const Home = () => {
                                             {item.description}
                                         </p>
 
-                                        {/* Details */}
                                         <div className='space-y-2'>
                                             {item.details.map((detail, idx) => (
                                                 <div
@@ -476,7 +459,6 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* Foydalar Section */}
             <section className='py-24 px-6'>
                 <div className='max-w-7xl mx-auto'>
                     <div className='text-center mb-20'>
@@ -493,7 +475,6 @@ export const Home = () => {
                     </div>
 
                     <div className='grid lg:grid-cols-2 gap-16 items-center'>
-                        {/* Chap tomon - matn */}
                         <div className='order-2 lg:order-1'>
                             <div className='space-y-8'>
                                 {[
@@ -548,10 +529,8 @@ export const Home = () => {
                             </div>
                         </div>
 
-                        {/* O'ng tomon - statistika */}
                         <div className='order-1 lg:order-2'>
                             <div className='relative'>
-                                {/* Central circle */}
                                 <div className='relative w-80 h-80 mx-auto'>
                                     <div className='absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full border-2 border-blue-400/30 flex items-center justify-center backdrop-blur-sm'>
                                         <div className='text-center'>
@@ -564,7 +543,6 @@ export const Home = () => {
                                         </div>
                                     </div>
 
-                                    {/* Floating stats */}
                                     {[
                                         {
                                             value: "500+",
@@ -622,7 +600,6 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* Testimonials Section */}
             <section className='py-24 px-6 bg-gradient-to-r from-slate-900/30 to-blue-900/20 relative overflow-hidden'>
                 <div className='max-w-6xl mx-auto'>
                     <div className='text-center mb-20'>
@@ -638,7 +615,6 @@ export const Home = () => {
                     </div>
 
                     <div className='relative'>
-                        {/* Testimonial cards container */}
                         <div className='relative h-80 overflow-hidden'>
                             {[
                                 {
@@ -674,7 +650,6 @@ export const Home = () => {
                                     }`}>
                                     <div className='max-w-4xl mx-auto'>
                                         <div className='p-10 rounded-3xl bg-gradient-to-br from-slate-800/40 to-blue-900/20 border border-slate-700/40 backdrop-blur-sm text-center'>
-                                            {/* Stars */}
                                             <div className='flex justify-center items-center mb-8'>
                                                 {[
                                                     ...Array(
@@ -688,12 +663,10 @@ export const Home = () => {
                                                 ))}
                                             </div>
 
-                                            {/* Quote */}
                                             <blockquote className='text-2xl md:text-3xl text-slate-200 mb-10 leading-relaxed italic font-light'>
                                                 "{testimonial.text}"
                                             </blockquote>
 
-                                            {/* Author info */}
                                             <div className='flex items-center justify-center space-x-4'>
                                                 <div className='w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-xl'>
                                                     {testimonial.name
@@ -715,8 +688,6 @@ export const Home = () => {
                                 </div>
                             ))}
                         </div>
-
-                        {/* Navigation */}
                         <div className='flex justify-center items-center mt-12 space-x-4'>
                             <button
                                 onClick={() =>
@@ -758,7 +729,6 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* CTA Section */}
             <section className='py-24 px-6 relative'>
                 <div className='absolute inset-0 bg-gradient-to-r from-blue-600/10 to-cyan-500/10'></div>
                 <div className='absolute inset-0 opacity-10'>
@@ -818,11 +788,9 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* Footer */}
             <footer className='py-20 px-6 border-t border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800'>
                 <div className='max-w-7xl mx-auto'>
                     <div className='grid md:grid-cols-4 gap-12 mb-16'>
-                        {/* Logo va tavsif */}
                         <div className='md:col-span-2'>
                             <div className='flex items-center mb-8'>
                                 <div className='w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mr-4 shadow-lg shadow-blue-500/25'>
@@ -838,7 +806,6 @@ export const Home = () => {
                                 bilan biznesingizni avtomatlashtiring.
                             </p>
 
-                            {/* Social media */}
                             <div className='flex space-x-4'>
                                 {["Telegram", "Instagram", "LinkedIn"].map(
                                     (social, index) => (
@@ -854,7 +821,6 @@ export const Home = () => {
                             </div>
                         </div>
 
-                        {/* Xizmatlar */}
                         <div>
                             <h4 className='text-2xl font-bold mb-8 text-blue-300'>
                                 Xizmatlar
@@ -880,7 +846,6 @@ export const Home = () => {
                             </ul>
                         </div>
 
-                        {/* Bog'lanish */}
                         <div>
                             <h4 className='text-2xl font-bold mb-8 text-blue-300'>
                                 Bog'lanish
@@ -908,12 +873,11 @@ export const Home = () => {
                         </div>
                     </div>
 
-                    {/* Bottom footer */}
                     <div className='pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center'>
                         <p className='text-slate-500 mb-6 md:mb-0 text-lg'>
                             © 2025 WorkCheck. Barcha huquqlar himoyalangan.
                         </p>
-                        <div className='flex space-x-8 text-slate-500'>
+                        {/* <div className='flex space-x-8 text-slate-500'>
                             {[
                                 "Maxfiylik Siyosati",
                                 "Foydalanish Shartlari",
@@ -927,67 +891,10 @@ export const Home = () => {
                                     <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full'></span>
                                 </a>
                             ))}
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </footer>
-
-            {/* CSS Animations */}
-            <style>{`
-                @keyframes slideInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(40px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                @keyframes slideInLeft {
-                    from {
-                        opacity: 0;
-                        transform: translateX(-40px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateX(0);
-                    }
-                }
-
-                @keyframes bounceIn {
-                    0% {
-                        opacity: 0;
-                        transform: scale(0.3);
-                    }
-                    50% {
-                        transform: scale(1.05);
-                    }
-                    70% {
-                        transform: scale(0.9);
-                    }
-                    100% {
-                        opacity: 1;
-                        transform: scale(1);
-                    }
-                }
-
-                .animate-slideInUp {
-                    animation: slideInUp 0.8s ease-out forwards;
-                    opacity: 0;
-                }
-
-                .animate-slideInLeft {
-                    animation: slideInLeft 0.8s ease-out forwards;
-                    opacity: 0;
-                }
-
-                .animate-bounceIn {
-                    animation: bounceIn 0.8s ease-out forwards;
-                    opacity: 0;
-                }
-            `}</style>
         </div>
     );
 };
