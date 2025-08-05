@@ -21,7 +21,7 @@ import {
     Zap,
 } from "lucide-react";
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
-import Logo from "../../public/favicon.png";
+import Logo from "/favicon.png";
 const chatID = import.meta.env.VITE_CHAT_ID;
 const bot_token = import.meta.env.VITE_BOT_TOKEN;
 
