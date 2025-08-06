@@ -687,9 +687,9 @@ export const Home = () => {
                         </div>
 
                         <div>
-                            <h4 className='text-2xl font-bold mb-8 text-blue-300'>
+                            <h1 className='text-2xl font-bold mb-8 text-blue-300'>
                                 Bog'lanish
-                            </h4>
+                            </h1>
                             <div className='space-y-6 text-slate-400'>
                                 <div className='flex items-center group hover:text-white transition-colors duration-300'>
                                     <div className='w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center mr-4 group-hover:bg-blue-500 transition-colors duration-300'>
