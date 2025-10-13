@@ -54,8 +54,6 @@ export const Home = () => {
         };
     }, []);
 
-    console.log();
-
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setLoading(true);
